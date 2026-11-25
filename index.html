@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ромашка · HR-портал — заявка на отпуск</title>
+<meta name="description" content="Учебный тренажёр «Заявка на отпуск». Компания и люди вымышлены.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500;700&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{
+  --red:#F42C24; --yellow:#FFE100; --pink:#FFEAEA; --cream:#F4EFE6; --black:#111; --white:#fff;
+  --grey:#8a8580; --line:#e2dbcf; --ok:#2e7d32;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:Roboto,Arial,sans-serif; color:var(--black); background:var(--cream);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  min-height:100vh; -webkit-tap-highlight-color:transparent;
+}
+h1,h2,h3,.osw{font-family:Oswald,'Arial Narrow',sans-serif; text-transform:uppercase; letter-spacing:.02em; margin:0}
+button{font:inherit; cursor:pointer}
+.hidden{display:none!important}
+
+/* бумага и скотч */
+.paper{position:relative; background:var(--white); filter:drop-shadow(3px 6px 8px rgba(0,0,0,.18))}
+.paper-in{background:var(--white); padding:28px}
+.tape{position:absolute; width:120px; height:34px; background:rgba(255,225,0,.9); box-shadow:0 1px 2px rgba(0,0,0,.12)}
+
+/* шапка портала */
+.top{display:flex; align-items:center; gap:16px; padding:14px 24px; background:var(--black); color:var(--white); flex-wrap:wrap}
+.logo{display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit}
+.logo-mark{background:var(--red); color:var(--white); font-family:Oswald; font-weight:700; font-size:22px; padding:2px 10px; transform:rotate(-3deg)}
+.logo-sub{font-size:14px; color:#cfcac2}
+.top .sp{flex:1}
+.chip{font-size:14px; color:#e8e3da}
+.timer{font-family:Oswald; font-size:20px; background:var(--white); color:var(--black); padding:2px 12px; transform:rotate(2deg)}
+
+.wrap{max-width:1040px; margin:0 auto; padding:28px 20px 60px}
+.crumbs{font-size:14px; color:var(--grey); margin-bottom:10px}
+.crumbs a{color:var(--grey)}
+.page-title{font-size:40px; margin-bottom:22px}
+
+/* плитки главной */
+.tiles{display:grid; grid-template-columns:repeat(4,1fr); gap:18px}
+.tile{border:0; text-align:left; padding:22px 20px 26px; background:var(--white); min-height:130px; display:flex; flex-direction:column; justify-content:space-between; filter:drop-shadow(2px 4px 6px rgba(0,0,0,.12))}
+.tile b{font-family:Oswald; font-size:26px; text-transform:uppercase}
+.tile span{font-size:14px; color:var(--grey)}
+.tile:hover{outline:3px solid var(--red)}
+.tile.main{background:var(--red); color:var(--white)}
+.tile.main span{color:#ffd9d6}
+
+.devpanel{margin-top:30px; background:#1d1d1d; color:#c9f7c9; font-family:Consolas,'Courier New',monospace; font-size:13px; padding:16px 18px; border-radius:4px}
+.devpanel h3{font-family:Consolas,'Courier New',monospace; text-transform:none; color:#fff; font-size:14px; margin-bottom:10px; letter-spacing:0}
+.devpanel label{display:block; color:#9a9a9a; margin-top:8px}
+.devpanel input{width:100%; background:#000; color:#c9f7c9; border:1px solid #444; padding:6px 8px; font-family:inherit; font-size:13px}
+.devpanel button{margin-top:12px; background:#333; color:#fff; border:1px solid #555; padding:6px 12px; font-size:13px}
+
+/* отпуска */
+.actions{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:22px}
+.btn{border:0; padding:12px 22px; font-family:Oswald; font-size:18px; text-transform:uppercase; letter-spacing:.03em}
+.btn-red{background:var(--red); color:var(--white)}
+.btn-red:active{transform:translateY(1px)}
+.btn-out{background:transparent; border:2px solid var(--black); color:var(--black)}
+.btn-black{background:var(--black); color:var(--white)}
+.balance{display:inline-block; background:var(--white); padding:10px 16px; margin-bottom:22px; filter:drop-shadow(2px 4px 6px rgba(0,0,0,.1))}
+.balance b{font-family:Oswald; font-size:24px}
+table.req{width:100%; border-collapse:collapse; background:var(--white); filter:drop-shadow(2px 4px 6px rgba(0,0,0,.1))}
+.req th,.req td{text-align:left; padding:12px 14px; border-bottom:1px solid var(--line); font-size:15px}
+.req th{font-family:Oswald; text-transform:uppercase; font-weight:500; font-size:14px; color:var(--grey)}
+.st{display:inline-block; padding:2px 8px; font-size:13px; font-weight:500}
+.st-ok{background:#e3f1e4; color:var(--ok)}
+.st-wait{background:#fff6bf; color:#7a6400}
+.st-draft{background:#ececec; color:#666}
+.empty{padding:20px; color:var(--grey)}
+
+/* модальное окно */
+.overlay{position:fixed; inset:0; background:rgba(17,17,17,.55); display:flex; align-items:flex-start; justify-content:center; padding:40px 16px; overflow:auto; z-index:10}
+.modal{width:100%; max-width:620px; position:relative}
+.modal .paper-in{padding:30px 30px 26px}
+.modal h2{font-size:30px; margin-bottom:18px}
+.x{position:absolute; top:10px; right:12px; background:none; border:0; font-size:28px; line-height:1; color:var(--grey)}
+.f{margin-bottom:14px}
+.f label{display:block; font-size:14px; font-weight:500; margin-bottom:5px}
+.f label i{color:var(--red); font-style:normal}
+.f input,.f select,.f textarea{width:100%; padding:10px 12px; font:inherit; font-size:16px; border:1.5px solid #cfc7b8; background:#fffdf9; border-radius:0}
+.f textarea{min-height:70px; resize:vertical}
+.row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.calc{display:flex; gap:14px; margin:4px 0 14px}
+.calc div{flex:1; background:var(--pink); padding:10px 12px}
+.calc span{display:block; font-size:13px; color:#7a5c5a}
+.calc b{font-family:Oswald; font-size:26px}
+.err{color:var(--red); font-size:14px; min-height:18px; margin:4px 0 10px}
+.foot{display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:6px}
+.link{background:none; border:0; padding:0; color:#777; text-decoration:underline; font-size:15px}
+.rules-link{color:#555; font-size:14px}
+.rules h3{font-size:24px; margin-bottom:12px}
+.rules ol{padding-left:20px; margin:0; line-height:1.5; font-size:15px}
+.rules li{margin-bottom:8px}
+
+/* экран задания и результата */
+.center{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:30px 16px}
+.task{max-width:640px; width:100%; position:relative; transform:rotate(-1.2deg)}
+.task .paper-in{padding:40px 40px 34px}
+.label{display:inline-block; background:var(--red); color:var(--white); font-family:Oswald; font-weight:700; font-size:20px; text-transform:uppercase; padding:4px 14px; transform:rotate(-3deg); margin-bottom:18px}
+.task h1{font-size:44px; line-height:1.05; margin-bottom:18px}
+.task p{font-size:18px; line-height:1.5; margin:0 0 12px}
+.task .hl{background:var(--yellow); padding:0 4px}
+.result{max-width:560px; width:100%; text-align:center; position:relative; transform:rotate(1deg)}
+.result h1{font-size:46px; margin:10px 0}
+.big{font-family:Oswald; font-size:64px; color:var(--red)}
+.note{font-size:12px; color:var(--grey); text-align:center; padding:18px}
+
+/* журнал руководителя */
+.journal-empty{background:var(--white); padding:50px 20px; text-align:center; filter:drop-shadow(2px 4px 6px rgba(0,0,0,.1))}
+.journal-empty b{font-family:Oswald; font-size:30px; text-transform:uppercase; display:block; margin-bottom:6px}
+
+@media (max-width:760px){
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+  .tile{min-width:0; padding:16px 14px 18px; min-height:110px}
+  .tile b{font-size:20px; overflow-wrap:anywhere}
+  .page-title{font-size:30px}
+  .row{grid-template-columns:1fr}
+  .overlay{padding:70px 10px 20px}
+  .modal .paper-in{padding:24px 18px 20px}
+  .task .paper-in{padding:30px 22px 26px}
+  .task h1{font-size:34px}
+  .task p{font-size:16px}
+  .req th:nth-child(4),.req td:nth-child(4){display:none}
+  .req th,.req td{padding:10px 8px; font-size:14px}
+  .top{padding:10px 14px; gap:10px}
+  .chip{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- 1. Задание -->
+<section id="s-task" class="center hidden">
+  <div class="task paper" data-torn>
+    <div class="tape" style="top:-14px;left:46%;transform:rotate(-4deg)"></div>
+    <div class="paper-in">
+      <div class="label">Задание</div>
+      <h1>Оформи отпуск</h1>
+      <p>Ты — <b>Анна Смирнова</b>, менеджер по продажам компании «Ромашка».</p>
+      <p>Оформи ежегодный отпуск <span class="hl">с 5 по 18 июля 2027</span> и отправь на согласование руководителю — <b>Игорю Петрову</b>.</p>
+      <p>Уложись в <b>3 минуты</b>.</p>
+      <div style="margin-top:22px"><button class="btn btn-red" id="start">Начать</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- Портал -->
+<div id="portal" class="hidden">
+  <header class="top">
+    <a class="logo" href="#" data-go="home"><span class="logo-mark">РОМАШКА</span><span class="logo-sub">HR-портал</span></a>
+    <span class="sp"></span>
+    <span class="chip">Анна Смирнова · менеджер по продажам</span>
+    <span class="timer" id="timer">0:00</span>
+  </header>
+
+  <!-- 2. Главная -->
+  <main id="s-home" class="wrap hidden">
+    <h1 class="page-title">Добрый день, Анна!</h1>
+    <div class="tiles">
+      <button class="tile main" data-go="vac"><b>Отпуска</b><span>Заявки и остаток дней</span></button>
+      <button class="tile" data-go="stub" data-title="Документы"><b>Документы</b><span>Справки и заявления</span></button>
+      <button class="tile" data-go="stub" data-title="Расчётный лист"><b>Расчётный лист</b><span>Начисления за месяц</span></button>
+      <button class="tile" data-go="stub" data-title="Профиль"><b>Профиль</b><span>Личные данные</span></button>
+    </div>
+    <div class="devpanel">
+      <h3>⚙ Настройки разработчика</h3>
+      <label>API_KEY</label><input value="demo-romashka-api-key-0000-1111" readonly>
+      <label>SHEET_ID</label><input value="1aB3dE5gH7jK9mN1pQ3rS5tU7vW9xY1zA3cE5gH7jK9" readonly>
+      <label>FOLDER_ID</label><input value="0FoLdEr-Romashka-HR-2027-xyz" readonly>
+      <button type="button">Сохранить настройки</button>
+    </div>
+  </main>
+
+  <!-- Отпуска -->
+  <main id="s-vac" class="wrap hidden">
+    <div class="crumbs"><a href="#" data-go="home">Главная</a> / Отпуска</div>
+    <h1 class="page-title">Отпуска</h1>
+    <div class="balance">Остаток на 2027 год: <b>28</b> календарных дней</div>
+    <div class="actions">
+      <button class="btn btn-red" data-open-form>Новая заявка</button>
+      <button class="btn btn-out" data-open-form>Создать заявку</button>
+    </div>
+    <h2 class="osw" style="font-size:22px;margin-bottom:10px">Мои заявки</h2>
+    <table class="req">
+      <thead><tr><th>Период</th><th>Дней</th><th>Статус</th><th>Согласующий</th></tr></thead>
+      <tbody id="req-body"></tbody>
+    </table>
+  </main>
+
+  <!-- Заглушка разделов -->
+  <main id="s-stub" class="wrap hidden">
+    <div class="crumbs"><a href="#" data-go="home">Главная</a> / <span id="stub-title"></span></div>
+    <h1 class="page-title" id="stub-h"></h1>
+    <div class="journal-empty"><b>Раздел недоступен</b>В учебной версии работает только раздел «Отпуска».</div>
+  </main>
+
+  <!-- 5. Журнал руководителя (скрытая ссылка #rukovoditel) -->
+  <main id="s-journal" class="wrap hidden">
+    <div class="crumbs">Кабинет руководителя · Игорь Петров</div>
+    <h1 class="page-title">Заявки на согласование</h1>
+    <table class="req">
+      <thead><tr><th>Сотрудник</th><th>Период</th><th>Дней</th><th>Получена</th></tr></thead>
+    </table>
+    <div class="journal-empty"><b>Заявок нет</b>Входящих заявок на согласование: 0</div>
+  </main>
+  <div class="note">Учебный тренажёр. Компания «Ромашка» и все люди вымышлены.</div>
+</div>
+
+<!-- 3. Форма заявки -->
+<div id="form-ov" class="overlay hidden">
+  <div class="modal paper" data-torn>
+    <div class="tape" style="top:-14px;left:24px;transform:rotate(-6deg)"></div>
+    <div class="paper-in">
+      <button class="x" id="form-x" aria-label="Закрыть">×</button>
+      <h2>Новая заявка на отпуск</h2>
+      <form id="vf" novalidate autocomplete="off">
+        <div class="f"><label>Вид отпуска <i>*</i></label>
+          <select id="f-type">
+            <option value="">— выберите —</option>
+            <option>Ежегодный оплачиваемый</option>
+            <option>Без сохранения заработной платы</option>
+            <option>Учебный</option>
+          </select></div>
+        <div class="row">
+          <div class="f"><label>Дата начала <i>*</i></label><input type="date" id="f-from" min="2027-01-01" max="2027-12-31"></div>
+          <div class="f"><label>Дата окончания <i>*</i></label><input type="date" id="f-to" min="2027-01-01" max="2027-12-31"></div>
+        </div>
+        <div class="calc">
+          <div><span>Количество дней</span><b id="c-days">—</b></div>
+          <div><span>Остаток после отпуска</span><b id="c-left">28</b></div>
+        </div>
+        <div class="f"><label>Согласующий <i>*</i></label>
+          <select id="f-appr">
+            <option value="">— выберите —</option>
+            <option>Игорь Петров — руководитель отдела продаж</option>
+            <option>Мария Козлова — HR-бизнес-партнёр</option>
+            <option>Олег Иванов — финансовый директор</option>
+          </select></div>
+        <div class="f"><label>Комментарий <i>*</i></label><textarea id="f-com" placeholder="Например: ежегодный отпуск по графику"></textarea></div>
+        <div class="rules-link">Перед отправкой ознакомьтесь: <button type="button" class="link" id="rules-open">Правила оформления отпуска</button></div>
+        <div class="err" id="f-err"></div>
+        <div class="foot">
+          <button type="button" class="btn btn-red" id="b-save">Сохранить</button>
+          <button type="button" class="link" id="b-send">Отправить на согласование</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Правила -->
+<div id="rules-ov" class="overlay hidden" style="z-index:20">
+  <div class="modal paper rules" data-torn>
+    <div class="paper-in">
+      <button class="x" id="rules-x" aria-label="Закрыть">×</button>
+      <h3>Правила оформления отпуска</h3>
+      <ol>
+        <li>Ежегодный оплачиваемый отпуск — 28 календарных дней в год.</li>
+        <li>Отпуск можно разделить на части. Одна из частей отпуска должна быть не менее <b>7 календарных дней</b>.</li>
+        <li>Заявку нужно отправить на согласование не позднее чем за 14 дней до начала отпуска.</li>
+        <li>Согласующий — ваш непосредственный руководитель.</li>
+        <li>В комментарии укажите основание или договорённость с руководителем.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- 4. Результат -->
+<section id="s-result" class="center hidden">
+  <div class="result paper" data-torn>
+    <div class="tape" style="top:-14px;left:40%;transform:rotate(5deg)"></div>
+    <div class="paper-in" style="padding:40px 30px">
+      <div class="label">Готово</div>
+      <h1>Заявка отправлена!</h1>
+      <div style="font-size:18px">Время оформления</div>
+      <div class="big" id="r-time">0:00</div>
+      <h1 style="font-size:40px">Молодец! 👍</h1>
+      <div style="margin-top:20px"><button class="btn btn-black" data-go="vac">В мои заявки</button></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var S = sessionStorage, KEY = 'romashka-state-v1';
+  var state = load() || {screen:'task', requests:[]};
+  var started = null;                 // момент старта таймера (только в памяти)
+  var tick = null;
+
+  function load(){ try{ return JSON.parse(S.getItem(KEY)); }catch(e){ return null; } }
+  function save(){ try{ S.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+  function $(id){ return document.getElementById(id); }
+
+  // рваные края у «бумаги»
+  function tear(el){
+    var pts=[], n=40, j=1.1;
+    for(var i=0;i<=n;i++) pts.push((i*100/n).toFixed(1)+'% '+(Math.random()*j).toFixed(2)+'%');
+    for(i=0;i<=n;i++) pts.push((100-Math.random()*j*0.6).toFixed(2)+'% '+(i*100/n).toFixed(1)+'%');
+    for(i=n;i>=0;i--) pts.push((i*100/n).toFixed(1)+'% '+(100-Math.random()*j).toFixed(2)+'%');
+    for(i=n;i>=0;i--) pts.push((Math.random()*j*0.6).toFixed(2)+'% '+(i*100/n).toFixed(1)+'%');
+    var inner = el.querySelector('.paper-in'); if(inner) inner.style.clipPath='polygon('+pts.join(',')+')';
+  }
+  document.querySelectorAll('[data-torn]').forEach(tear);
+
+  // экраны
+  var screens = ['s-task','s-home','s-vac','s-stub','s-journal','s-result'];
+  function show(name, opts){
+    screens.forEach(function(id){ $(id).classList.add('hidden'); });
+    var inPortal = (name==='home'||name==='vac'||name==='stub'||name==='journal');
+    $('portal').classList.toggle('hidden', !inPortal);
+    $('s-'+name).classList.remove('hidden');
+    $('timer').classList.toggle('hidden', name==='journal');
+    if(name==='stub' && opts){ $('stub-title').textContent=opts; $('stub-h').textContent=opts; }
+    if(name==='vac') renderReq();
+    if(name!=='journal'){ state.screen=name; save(); }
+    window.scrollTo(0,0);
+  }
+
+  // таймер
+  function fmt(ms){ var s=Math.max(0,Math.floor(ms/1000)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+  function startTimer(){
+    started = Date.now();
+    clearInterval(tick);
+    tick = setInterval(function(){ $('timer').textContent = fmt(Date.now()-started); }, 250);
+  }
+
+  // список заявок
+  var past = {period:'03.08.2026 — 16.08.2026', days:14, status:'ok', appr:'Игорь Петров'};
+  function d2(s){ if(!s) return '—'; var p=s.split('-'); return p[2]+'.'+p[1]+'.'+p[0]; }
+  function renderReq(){
+    var rows = state.requests.slice().reverse().map(function(r){
+      var st = r.status==='draft' ? '<span class="st st-draft">Черновик</span>' : '<span class="st st-wait">На согласовании</span>';
+      return '<tr><td>'+d2(r.from)+' — '+d2(r.to)+'</td><td>'+r.days+'</td><td>'+st+'</td><td>'+esc(r.appr.split(' — ')[0])+'</td></tr>';
+    });
+    rows.push('<tr><td>'+past.period+'</td><td>'+past.days+'</td><td><span class="st st-ok">Согласовано</span></td><td>'+past.appr+'</td></tr>');
+    $('req-body').innerHTML = rows.join('');
+  }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  // расчёт дней
+  function pd(s){ var p=s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+  function countDays(a,b){
+    var A=pd(a), B=pd(b), DAY=864e5;
+    if(B < A){ return Math.round((B-A)/DAY)+1; }          // даты наоборот — считаем «как есть»
+    var n=0, d=new Date(A);
+    while(d<=B){ var w=d.getDay(); if(w!==0 && w!==6) n++; d.setDate(d.getDate()+1); }  // только будни
+    return n;
+  }
+  function recalc(){
+    var a=$('f-from').value, b=$('f-to').value;
+    if(a && b){ var n=countDays(a,b); $('c-days').textContent=n; $('c-left').textContent=28-n; }
+    else { $('c-days').textContent='—'; $('c-left').textContent='28'; }
+  }
+  $('f-from').addEventListener('change', recalc); $('f-to').addEventListener('change', recalc);
+  $('f-from').addEventListener('input', recalc); $('f-to').addEventListener('input', recalc);
+
+  // форма
+  function openForm(){ $('form-ov').classList.remove('hidden'); document.body.style.overflow='hidden'; }
+  function closeForm(){ $('vf').reset(); recalc(); $('f-err').textContent=''; resetSend(); $('form-ov').classList.add('hidden'); document.body.style.overflow=''; }
+  document.querySelectorAll('[data-open-form]').forEach(function(b){ b.addEventListener('click', openForm); });
+  $('form-x').addEventListener('click', closeForm);
+  $('form-ov').addEventListener('click', function(e){ if(e.target===this) closeForm(); });   // клик мимо окна
+
+  $('rules-open').addEventListener('click', function(){ $('rules-ov').classList.remove('hidden'); });
+  $('rules-x').addEventListener('click', function(){ $('rules-ov').classList.add('hidden'); });
+  $('rules-ov').addEventListener('click', function(e){ e.stopPropagation(); if(e.target===this) this.classList.add('hidden'); });
+
+  function check(){
+    var miss=[];
+    if(!$('f-type').value) miss.push('вид отпуска');
+    if(!$('f-from').value) miss.push('дату начала');
+    if(!$('f-to').value) miss.push('дату окончания');
+    if(!$('f-appr').value) miss.push('согласующего');
+    if(!$('f-com').value.trim()) miss.push('комментарий');
+    if(miss.length){ $('f-err').textContent='Заполните: '+miss.join(', ')+'.'; return false; }
+    $('f-err').textContent=''; return true;
+  }
+  function resetSend(){ $('b-save').textContent='Сохранить'; $('b-send').textContent='Отправить на согласование'; }
+  function submit(status, btn){
+    if(!check()) return;
+    btn.textContent = status==='draft' ? 'Сохраняем…' : 'Отправляем…';
+    var req = { from:$('f-from').value, to:$('f-to').value, days:$('c-days').textContent, appr:$('f-appr').value, type:$('f-type').value, status:status };
+    setTimeout(function(){
+      state.requests.push(req); save();
+      var t = started ? Date.now()-started : 0;
+      $('r-time').textContent = fmt(t);
+      clearInterval(tick);
+      $('vf').reset(); recalc(); resetSend();
+      $('form-ov').classList.add('hidden'); $('rules-ov').classList.add('hidden'); document.body.style.overflow='';
+      show('result');
+    }, 700);
+  }
+  $('b-save').addEventListener('click', function(){ submit('draft', this); });
+  $('b-send').addEventListener('click', function(){ submit('sent', this); });
+
+  // навигация
+  document.addEventListener('click', function(e){
+    var g = e.target.closest('[data-go]'); if(!g) return;
+    e.preventDefault(); show(g.getAttribute('data-go'), g.getAttribute('data-title'));
+  });
+  $('start').addEventListener('click', function(){ startTimer(); show('home'); });
+
+  // старт страницы
+  if(location.hash==='#rukovoditel'){ show('journal'); }
+  else if(state.screen && state.screen!=='task'){
+    if(state.screen!=='result') startTimer();     // после обновления страницы таймер начинается заново
+    show(state.screen==='result' ? 'vac' : state.screen);
+  } else { show('task'); }
+  window.addEventListener('hashchange', function(){ if(location.hash==='#rukovoditel') show('journal'); });
+})();
+</script>
+</body>
+</html>
