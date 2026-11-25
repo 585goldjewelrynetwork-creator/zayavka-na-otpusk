@@ -318,6 +318,7 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
     $('portal').classList.toggle('hidden', !inPortal);
     $('s-'+name).classList.remove('hidden');
     $('timer').classList.toggle('hidden', name==='journal');
+    document.querySelector('.chip').textContent = name==='journal' ? 'Игорь Петров · руководитель отдела продаж' : 'Анна Смирнова · менеджер по продажам';
     if(name==='stub' && opts){ $('stub-title').textContent=opts; $('stub-h').textContent=opts; }
     if(name==='vac') renderReq();
     if(name!=='journal'){ state.screen=name; save(); }
