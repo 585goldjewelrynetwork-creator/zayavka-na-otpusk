@@ -1,0 +1,19 @@
+index.html
+  s_a44cf090b906df::t_45cfbe1bc1cf80 321
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "d1877d436b7411a5a11a4d9bc325c3ec76f02ca0",
+  "prompts": {},
+  "sessions": {
+    "s_a44cf090b906df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "164b0d8a-e582-4b9e-9fb5-2480a99bc477",
+        "model": "unknown"
+      },
+      "human_author": "Ольга Луценко <585goldjewelrynetwork@gmail.com>"
+    }
+  }
+}
