@@ -52,7 +52,10 @@ button{font:inherit; cursor:pointer}
 .tile.main{background:var(--red); color:var(--white)}
 .tile.main span{color:#ffd9d6}
 
-.devpanel{margin-top:30px; background:#1d1d1d; color:#c9f7c9; font-family:Consolas,'Courier New',monospace; font-size:13px; padding:16px 18px; border-radius:4px}
+.gear{background:none; border:0; padding:0 0 0 6px; font-size:14px; color:#b5afa5; line-height:1; vertical-align:-1px}
+.gear:hover{color:var(--grey)}
+.devwrap{padding-top:0}
+.devpanel{margin-top:0;background:#1d1d1d; color:#c9f7c9; font-family:Consolas,'Courier New',monospace; font-size:13px; padding:16px 18px; border-radius:4px}
 .devpanel h3{font-family:Consolas,'Courier New',monospace; text-transform:none; color:#fff; font-size:14px; margin-bottom:10px; letter-spacing:0}
 .devpanel label{display:block; color:#9a9a9a; margin-top:8px}
 .devpanel input{width:100%; background:#000; color:#c9f7c9; border:1px solid #444; padding:6px 8px; font-family:inherit; font-size:13px}
@@ -170,13 +173,6 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
       <button class="tile" data-go="stub" data-title="Расчётный лист"><b>Расчётный лист</b><span>Начисления за месяц</span></button>
       <button class="tile" data-go="stub" data-title="Профиль"><b>Профиль</b><span>Личные данные</span></button>
     </div>
-    <div class="devpanel">
-      <h3>⚙ Настройки разработчика</h3>
-      <label>API_KEY</label><input value="demo-romashka-api-key-0000-1111" readonly>
-      <label>SHEET_ID</label><input value="1aB3dE5gH7jK9mN1pQ3rS5tU7vW9xY1zA3cE5gH7jK9" readonly>
-      <label>FOLDER_ID</label><input value="0FoLdEr-Romashka-HR-2027-xyz" readonly>
-      <button type="button">Сохранить настройки</button>
-    </div>
   </main>
 
   <!-- Отпуска -->
@@ -211,7 +207,16 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
     </table>
     <div class="journal-empty"><b>Заявок нет</b>Входящих заявок на согласование: 0</div>
   </main>
-  <div class="note">Учебный тренажёр. Компания «Ромашка» и все люди вымышлены.</div>
+  <div class="note">Учебный тренажёр. Компания «Ромашка» и все люди вымышлены. <button type="button" class="gear" id="gear" title="Настройки" aria-label="Настройки">⚙</button></div>
+  <div class="wrap devwrap hidden" id="devpanel">
+    <div class="devpanel">
+      <h3>⚙ Настройки разработчика</h3>
+      <label>API_KEY</label><input value="demo-romashka-api-key-0000-1111" readonly>
+      <label>SHEET_ID</label><input value="1aB3dE5gH7jK9mN1pQ3rS5tU7vW9xY1zA3cE5gH7jK9" readonly>
+      <label>FOLDER_ID</label><input value="0FoLdEr-Romashka-HR-2027-xyz" readonly>
+      <button type="button">Сохранить настройки</button>
+    </div>
+  </div>
 </div>
 
 <!-- 3. Форма заявки -->
@@ -408,6 +413,11 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
     e.preventDefault(); show(g.getAttribute('data-go'), g.getAttribute('data-title'));
   });
   $('start').addEventListener('click', function(){ startTimer(); show('home'); });
+  // настройки разработчика — спрятаны под шестерёнку внизу
+  $('gear').addEventListener('click', function(){
+    var p = $('devpanel'); p.classList.toggle('hidden');
+    if(!p.classList.contains('hidden')) p.scrollIntoView({behavior:'smooth', block:'start'});
+  });
 
   // старт страницы
   if(location.hash==='#rukovoditel'){ show('journal'); }
