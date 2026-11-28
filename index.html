@@ -78,6 +78,7 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
 .st-wait{background:#fff6bf; color:#7a6400}
 .st-draft{background:#ececec; color:#666}
 .empty{padding:20px; color:var(--grey)}
+.m-appr{display:none}
 
 /* модальное окно */
 .overlay{position:fixed; inset:0; background:rgba(17,17,17,.55); display:flex; align-items:flex-start; justify-content:center; padding:40px 16px; overflow:auto; z-index:10}
@@ -90,6 +91,13 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
 .f label i{color:var(--red); font-style:normal}
 .f input,.f select,.f textarea{width:100%; padding:10px 12px; font:inherit; font-size:16px; border:1.5px solid #cfc7b8; background:#fffdf9; border-radius:0}
 .f textarea{min-height:70px; resize:vertical}
+.ac{position:relative}
+.sugg{position:absolute; left:0; right:0; top:100%; margin-top:-1px; background:#fffdf9; border:1.5px solid #cfc7b8; z-index:5; box-shadow:0 6px 14px rgba(0,0,0,.12)}
+.sugg div{padding:9px 12px; font-size:15px; cursor:pointer}
+.sugg div:hover,.sugg div.on{background:var(--pink)}
+.sugg small{color:var(--grey)}
+.btn-calc{background:transparent; border:1.5px solid #cfc7b8; padding:6px 12px; font-size:14px; margin:0 0 10px}
+.btn-calc:hover{border-color:var(--black)}
 .row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
 .calc{display:flex; gap:14px; margin:4px 0 14px}
 .calc div{flex:1; background:var(--pink); padding:10px 12px}
@@ -132,6 +140,7 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
   .task h1{font-size:34px}
   .task p{font-size:16px}
   .req th:nth-child(4),.req td:nth-child(4){display:none}
+  .m-appr{display:block; font-size:13px; color:var(--grey); margin-top:2px}
   .req th,.req td{padding:10px 8px; font-size:14px}
   .top{padding:10px 14px; gap:10px}
   .chip{display:none}
@@ -238,17 +247,14 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
           <div class="f"><label>Дата начала <i>*</i></label><input type="date" id="f-from" min="2027-01-01" max="2027-12-31"></div>
           <div class="f"><label>Дата окончания <i>*</i></label><input type="date" id="f-to" min="2027-01-01" max="2027-12-31"></div>
         </div>
+        <button type="button" class="btn-calc" id="b-calc">Рассчитать дни</button>
         <div class="calc">
           <div><span>Количество дней</span><b id="c-days">—</b></div>
           <div><span>Остаток после отпуска</span><b id="c-left">28</b></div>
         </div>
-        <div class="f"><label>Согласующий <i>*</i></label>
-          <select id="f-appr">
-            <option value="">— выберите —</option>
-            <option>Игорь Петров — руководитель отдела продаж</option>
-            <option>Мария Козлова — HR-бизнес-партнёр</option>
-            <option>Олег Иванов — финансовый директор</option>
-          </select></div>
+        <div class="f ac"><label>Согласующий <i>*</i></label>
+          <input type="text" id="f-appr" placeholder="Начните вводить фамилию" autocomplete="off">
+          <div class="sugg hidden" id="appr-sugg"></div></div>
         <div class="f"><label>Комментарий <i>*</i></label><textarea id="f-com" placeholder="Например: ежегодный отпуск по графику"></textarea></div>
         <div class="rules-link">Перед отправкой ознакомьтесь: <button type="button" class="link" id="rules-open">Правила оформления отпуска</button></div>
         <div class="err" id="f-err"></div>
@@ -273,6 +279,7 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
         <li>Заявку нужно отправить на согласование не позднее чем за 14 дней до начала отпуска.</li>
         <li>Согласующий — ваш непосредственный руководитель.</li>
         <li>В комментарии укажите основание или договорённость с руководителем.</li>
+        <li>Для подачи на бумаге: <a href="files/hr/blank-zayavleniya-na-otpusk-2027.pdf" target="_blank" rel="noopener">бланк заявления на отпуск (PDF, 84 КБ)</a>.</li>
       </ol>
     </div>
   </div>
@@ -344,9 +351,9 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
   function renderReq(){
     var rows = state.requests.slice().reverse().map(function(r){
       var st = r.status==='draft' ? '<span class="st st-draft">Черновик</span>' : '<span class="st st-wait">На согласовании</span>';
-      return '<tr><td>'+d2(r.from)+' — '+d2(r.to)+'</td><td>'+r.days+'</td><td>'+st+'</td><td>'+esc(r.appr.split(' — ')[0])+'</td></tr>';
+      return '<tr><td>'+d2(r.from)+' — '+d2(r.to)+'<small class="m-appr">'+esc(r.appr.split(' — ')[0])+'</small></td><td>'+r.days+'</td><td>'+st+'</td><td>'+esc(r.appr.split(' — ')[0])+'</td></tr>';
     });
-    rows.push('<tr><td>'+past.period+'</td><td>'+past.days+'</td><td><span class="st st-ok">Согласовано</span></td><td>'+past.appr+'</td></tr>');
+    rows.push('<tr><td>'+past.period+'<small class="m-appr">'+past.appr+'</small></td><td>'+past.days+'</td><td><span class="st st-ok">Согласовано</span></td><td>'+past.appr+'</td></tr>');
     $('req-body').innerHTML = rows.join('');
   }
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
@@ -378,6 +385,29 @@ table.req{width:100%; border-collapse:collapse; background:var(--white); filter:
   $('rules-open').addEventListener('click', function(){ $('rules-ov').classList.remove('hidden'); });
   $('rules-x').addEventListener('click', function(){ $('rules-ov').classList.add('hidden'); });
   $('rules-ov').addEventListener('click', function(e){ e.stopPropagation(); if(e.target===this) this.classList.add('hidden'); });
+
+  // согласующий: подсказки по фамилии, но принимается любой текст
+  var APPR = ['Игорь Петров — руководитель отдела продаж','Мария Козлова — HR-бизнес-партнёр','Олег Иванов — финансовый директор'];
+  function suggest(){
+    var q = $('f-appr').value.trim().toLowerCase(), box = $('appr-sugg');
+    var list = APPR.filter(function(n){ return !q || n.toLowerCase().indexOf(q) >= 0; });
+    if(!list.length || APPR.indexOf($('f-appr').value) >= 0){ box.classList.add('hidden'); return; }
+    box.innerHTML = list.map(function(n){ var p=n.split(' — '); return '<div data-v="'+esc(n)+'">'+esc(p[0])+' <small>— '+esc(p[1])+'</small></div>'; }).join('');
+    box.classList.remove('hidden');
+  }
+  $('f-appr').addEventListener('input', suggest);
+  $('f-appr').addEventListener('focus', suggest);
+  $('f-appr').addEventListener('blur', function(){ setTimeout(function(){ $('appr-sugg').classList.add('hidden'); }, 150); });
+  $('appr-sugg').addEventListener('mousedown', function(e){
+    var d = e.target.closest('[data-v]'); if(!d) return;
+    e.preventDefault(); $('f-appr').value = d.getAttribute('data-v'); $('appr-sugg').classList.add('hidden');
+  });
+
+  // «Рассчитать дни» — дни и так считаются сами
+  $('b-calc').addEventListener('click', function(){
+    var b=this; b.textContent='Считаем…';
+    setTimeout(function(){ recalc(); b.textContent='Рассчитать дни'; }, 500);
+  });
 
   function check(){
     var miss=[];
